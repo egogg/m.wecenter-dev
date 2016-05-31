@@ -1,0 +1,111 @@
+<?php TPL::output('global/header_meta.tpl.htm'); ?>
+<body>
+	<header id="header">
+		<div class="main-header">
+			<div class="container">
+				<a class="navbar-brand icon-logo" href="<?php echo base_url(); ?>" title="脑壳网">脑壳网</a>
+				<a class="navbar-slogan hidden-xs" href="<?php echo base_url(); ?>">中文最大智力答题社区</a>
+				<div class="navbar-user hidden-xs">
+		            <ul class="navbar-user-actions clearfix">
+		            	<!-- 登陆&注册栏 -->
+						<?php if ($this->user_id) { ?>
+							<li class="dropdown">
+								<a href="#" data-toggle="dropdown" aria-expanded="false">
+									<?php if ($this->user_info['inbox_unread'] != 0) {?>
+										<span class="m-count unread-mail"><?php echo $this->user_info['inbox_unread']?></span>
+									<?php } ?>
+									<img class="avatar" alt="<?php echo $this->user_info['user_name']; ?>" src="<?php echo get_avatar_url($this->user_info['uid'], 'mid'); ?>" />
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu dm-icon pull-right">
+									<li><a href="publish/"><i class="md md-create"></i> 发表问题</a></li>
+									<?php if ($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) { ?>
+		                    			<li><a href="publish/article/"><i class="md md-school"></i> 发布知识</a></li>
+		                    		<?php } ?>
+									<li class="divider"></li>
+									<li><a href="people/<?php echo $this->user_info['url_token']; ?>"><i class="md md-home"></i> 我的主页</a></li>
+		                           	<li><a href="inbox/"><?php if($this->user_info['inbox_unread'] > 0) { ?><span class="badge badge-important pull-right" id="inbox_unread"><?php echo $this->user_info['inbox_unread']; ?></span><?php } ?><i class="md md-mail"></i> 我的私信</a></li>
+		                           	<li><a href="favorite/"><span class="badge badge-important pull-right hide" id="inbox_unread">0</span><i class="md md-bookmark"></i> 我的收藏</a></li>
+									<li><a href="account/setting/profile/"><i class="md md-settings"></i> 我的设置</a></li>
+									<li class="divider"></li>
+									<?php if ($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) { ?>
+									<li><a href="admin/"><i class="md md-dashboard"></i> 后台管理</a></li>
+									<?php } ?>
+									<li><a href="account/logout/"><i class="md md-exit-to-app"></i> 退出登录</a></li>
+		                        </ul>
+							</li>
+
+							<li class="navbar-user-notification dropdown">
+								<a class="tm-notification" href="notifications/" data-toggle="dropdown" aria-expanded="false">
+									<i class="md md-notifications"></i>
+									<span class="m-count unread-notify" style="display:none" id="notifications_unread"><?php echo $this->user_info['notification_unread']; ?></span>
+								</a>
+								
+								<div class="dropdown-menu dropdown-menu-lg pull-right">
+									<div class="listview" id="notifications">
+		                                <div class="lv-header">
+		                                    未读消息
+		                                    <ul class="actions">
+		                                        <li class="dropdown">
+		                                            <a onclick="AWS.Message.read_notification(true, 0, true);" data-clear="notification">
+		                                                <i class="md md-done-all"></i>
+		                                            </a>
+		                                        </li>
+		                                    </ul>
+		                                </div>
+		                                <div id="header_notification_list" class="lv-body c-overflow" tabindex="2" style="overflow: hidden; outline: none;">
+		                                </div>
+		                    			
+		                                <a class="lv-footer" href="notifications/">查看全部</a>
+		                            </div>
+								</div>
+							</li>
+								
+						<?php } else { ?>
+							<li class="navbar-login">
+			                    <a href="account/login/">登录</a>
+			                </li>
+			                <li class="navbar-register">
+			                    <a href="account/register/">注册</a>
+			                </li>
+						<?php } ?>
+						<!-- end 登陆&注册栏 -->
+		            </ul>
+		        </div>
+				<form class="navbar-search hidden-xs" action="search/" id="global_search_form" method="post">
+					<div class="navbar-search-input dropdown">
+						<input class="form-control search-query" type="text" placeholder="<?php _e('搜索问题、专题、知识或人'); ?>" autocomplete="off" name="q" id="main-search-query" />
+						<div class="dropdown-menu dropdown-menu-lg pull-left">
+							<div class="listview">
+								<div class="title lv-header c-gray">输入关键字进行搜索</div>
+								<div class="aw-dropdown-list lv-body c-overflow" tabindex="1"></div>
+								<div class="search lv-footer"><span>搜索: </span><a onClick="$('#global_search_form').submit();"></a></div>
+							</div>
+						</div>
+					</div>
+					<span class="navbar-search-icon" title="<?php _e('搜索'); ?>" id="global_search_btns" onClick="$('#global_search_form').submit();"><a class="icon icon-search"></a></span>
+				</form>
+			</div>
+		</div>
+		<div class="main-nav">
+			<div class="container">
+		        <nav>
+	        		<ul>
+	        			<li><a href="<?php echo base_url(); ?>" class="<?php if ($_GET['app'] == 'explore') { ?>active<?php } ?>">精选</a></li>
+	        			<li><a href="question/" class="<?php if ($_GET['app'] == 'question') { ?>active<?php } ?>">题库</a></li>
+						<li><a href="topic/" class="<?php if ($_GET['app'] == 'topic') { ?>active<?php } ?>">专题</a></li>
+						<li><a href="article/" class="<?php if ($_GET['app'] == 'article') { ?>active<?php } ?>">知识</a></li>
+						<li><a href="people/" class="<?php if ($_GET['app'] == 'people') { ?>active<?php } ?>">排行</a></li>
+					</ul>
+		        </nav>
+	        </div>
+		</div>
+			
+	</header>
+	
+	<?php if ($this->user_id AND $this->user_info['email'] AND !$this->user_info['valid_email'] AND get_setting('register_valid_type') != 'N') { ?>
+		<div class="text-center alert alert-warning">
+			<?php _e('你的邮箱 %s 还未验证, <a onclick="AWS.ajax_request(G_BASE_URL + \'/account/ajax/send_valid_mail/\');">点击这里重新发送验证邮件</a>', $this->user_info['email']); ?>
+		</div>
+	<?php } ?>
+

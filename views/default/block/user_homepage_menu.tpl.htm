@@ -1,0 +1,110 @@
+<div class="user-info-menu-wrapper">
+    <div class="user-info-menu">
+        <div class="card user-info-basic text-center">
+            <div class="card-header card-padding">
+                <div class="m-b-10">
+                    <a href="people/<?php echo $this->user['url_token']; ?>">
+                        <img class="user-info-avatar" src="<?php echo get_avatar_url($this->user['uid'], 'max'); ?>" alt="<?php echo $this->user['user_name']; ?>">
+                    </a>
+                    
+                    <?php if($this->user_id) { ?>
+                        <ul class="actions">
+                            <?php if($this->user_id != $this->user['uid']) { ?>
+                                <li>
+                                    <a href="javascript:void(0);" onclick="AWS.dialog('inbox', '<?php echo $this->user['user_name']; ?>');" data-toggle="tooltip" data-original-title="发送私信" data-placement="bottom">
+                                        <i class="md md-email"></i>
+                                    </a>
+                                </li>
+                            <?php } else { ?>
+                                <li>
+                                    <a href="account/setting/" data-toggle="tooltip" data-original-title="个人设置" data-placement="bottom">
+                                        <i class="md md-settings"></i>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
+                </div>
+                <div>
+                    <h1>
+                        <?php echo $this->user['user_name']; ?> <?php if ($this->user['verified']) { ?><i class="icon-v <?php if ($this->user['verified'] == 'enterprise') { ?> i-ve<?php } ?>" title="<?php if ($this->user['verified'] == 'enterprise') { ?>企业认证<?php } else { ?>个人认证<?php } ?>"></i><?php } ?>
+                       
+                        <p class="user-signature m-t-10 m-b-0 c-gray">
+                            <span class="signature">
+                                <?php echo $this->user['signature']; ?>
+                            </span>
+
+                            <?php if($this->user_id && $this->user_id == $this->user['uid']) { ?>
+                                <div class="dropdown pmop-message user-signature-dialog">
+                                    <a data-toggle="dropdown" href="#" class="c-lightblue" aria-expanded="false">
+                                        <i class="md md-create"></i> 编辑个人简介
+                                    </a>
+                                    
+                                    <div class="dropdown-menu user-signature-dialog">
+                                        <textarea id="user-signature-input" placeholder="简短介绍一下自己"><?php echo $this->user['signature']; ?></textarea>
+                                        <button class="btn bgm-green btn-icon" onclick="AWS.User.update_signature();"><i class="md md-send"></i></button>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </p>
+                    </h1>
+
+                    <ul class="user-info-stats">
+                        <li class="<?php if($this->user['question_quiz_success_ratio'] < 0.5) { ?>c-red<?php } else { ?>c-green<?php } ?>">正确率 <?php echo number_format($this->user['question_quiz_success_ratio'] * 100, 1); ?>%</li>
+
+                        <li class="<?php if($this->user['question_quiz_poft_ratio'] < 0.5) { ?>c-red<?php } else { ?>c-green<?php } ?>">一次通过率 <?php echo number_format($this->user['question_quiz_poft_ratio'] * 100, 1); ?>%</li>
+                    </ul>
+                    <ul class="user-info-stats">
+                        <li>答题 <?php echo $this->user['question_quiz_count_total']; ?></li>
+                        <li>出题 <?php echo $this->user['question_count']; ?></li>
+                        <li>积分 <?php echo $this->user['integral']; ?></li>
+                    </ul>
+
+                    <div class="m-t-20">
+                        <a href="javascript:void(0);" onclick="AWS.User.follow($(this), 'user', <?php echo $this->user['uid']; ?>);" class="follow user-info-follow <?php if ($this->user_follow_check) { ?>following<?php } ?>">
+                            <span>
+                                <?php if ($this->user_follow_check) { ?>
+                                    <i class="md md-check"></i> 正在关注
+                                <?php } else { ?>
+                                    <i class="md md-add"></i> 添加关注
+                                <?php } ?>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="user-info-entry">
+            <div class="list-group">
+                <a href="people/following/id-<?php echo $this->user['uid']; ?>__type-topics" class="list-group-item <?php if($this->current_menu == 'following_topics') { ?>active<?php } ?>"> <i class="md md-add-to-photos"></i> 关注的专题 <span class="count-tag"><?php echo $this->user['topic_focus_count']; ?></span></a>
+                <a href="people/following/id-<?php echo $this->user['uid']; ?>__type-friends" class="list-group-item <?php if($this->current_menu == 'following_friends') { ?>active<?php } ?>"><i class="md md-person-add"></i> 关注的人 <span class="count-tag"><?php echo $this->user['friend_count']; ?></span></a>
+                <a href="people/following/id-<?php echo $this->user['uid']; ?>__type-fans" class="list-group-item <?php if($this->current_menu == 'following_fans') { ?>active<?php } ?>"> <i class="md md-people"></i> 被人关注 <span class="count-tag"><?php echo $this->user['fans_count']; ?></span></a>
+            </div>
+        </div>
+
+        <div class="user-info-entry">
+            <div class="list-group">
+                <a href="people/questions/id-<?php echo $this->user['uid']; ?>__type-answered" class="list-group-item <?php if($this->current_menu == 'questions_answered') { ?>active<?php } ?>"><i class="md md-assignment-turned-in"></i> 答题 <span class="count-tag"><?php echo $this->user_answered_question_count; ?></span></a>
+                <a href="people/questions/id-<?php echo $this->user['uid']; ?>__type-comments" class="list-group-item <?php if($this->current_menu == 'questions_comments') { ?>active<?php } ?>"> <i class="md md-comment"></i> 讨论 <span class="count-tag"><?php echo $this->user['answer_count']; ?></span></a>
+                <a href="people/questions/id-<?php echo $this->user['uid']; ?>__type-failed" class="list-group-item <?php if($this->current_menu == 'questions_failed') { ?>active<?php } ?>"> <i class="md md-assignment"></i> 错题 <span class="count-tag"><?php echo $this->user_failed_question_count; ?></span></a>
+                <a href="people/questions/id-<?php echo $this->user['uid']; ?>__type-publish" class="list-group-item <?php if($this->current_menu == 'questions_publish') { ?>active<?php } ?>"> <i class="md md-create"></i> 出题 <span class="count-tag"><?php echo $this->user['question_count']; ?></span></a>
+                <!-- <a href="#" class="list-group-item"> <i class="md md-school"></i> 投稿</a> -->
+            </div>
+        </div> 
+
+        <?php if($this->user_id && $this->user_id == $this->user['uid']) { ?>
+            <div class="user-info-entry">
+                <div class="list-group">
+                    <a href="account/setting/" class="list-group-item"> <i class="md md-settings"></i> 我的设置</a>
+                </div>
+            </div> 
+        <?php } ?>
+        
+        <div class="card">
+            <div class="card-body card-padding">
+                主页访问量 <strong class="pull-right"><?php echo $this->user['views_count']; ?></strong>  
+            </div>
+        </div>         
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<?php if ($this->user_list_lite) { ?>
+	<?php foreach($this->user_list_lite as $key => $val) { ?>
+		<div class="lv-item media">
+            <div class="pull-left">
+                <a href="people/<?php echo $val['url_token']; ?>" class="user-tag user-img" data-id="<?php echo $val['uid']; ?>">
+                    <img class="lv-img-sm" src="<?php echo get_avatar_url($val['uid'], 'mid'); ?>" alt="">
+                </a>
+            </div>
+            <div class="media-body">
+            	<div class="user-list-add-foucs">
+                	<a href="javascript:void(0);" onclick="AWS.User.follow($(this), 'user', <?php echo $val['uid']; ?>);" class="follow <?php if ($val['follow_check']) { ?>following<?php } ?>">
+            			<span>
+            				<?php if ($val['follow_check']) { ?>
+            					<i class="md md-check"></i> 正在关注
+            				<?php } else { ?>
+            					<i class="md md-add"></i> 添加关注
+            				<?php } ?>
+            			</span>
+            		</a>
+                </div>
+
+                <div class="lv-title">
+                	<a href="people/<?php echo $val['url_token']; ?>" class="user-tag user-name" data-id="<?php echo $val['uid']; ?>"><span class="title"><?php echo $val['user_name']; ?></span></a>
+					<?php if ($val['verified']) { ?><i class="icon-v<?php if ($val['verified'] == 'enterprise') { ?> i-ve<?php } ?>" title="<?php if ($val['verified'] == 'enterprise') { ?><?php _e('企业认证'); ?><?php } else { ?><?php _e('个人认证'); ?><?php } ?>"></i><?php } ?>
+					<a class="c-gray" data-toggle="tooltip" data-original-title="发送私信" data-placement="right" href="javascript:void(0);" onclick="AWS.dialog('inbox', '<?php echo $val['user_name']; ?>');"><i class="md md-email"></i></a>
+					<small class="lv-small"><?php echo $val['signature']; ?></small>
+                </div>
+                
+                <ul class="user-list-stats">
+                	<li class="<?php if($this->sort_type == 'success_ratio') { ?>active<?php } ?> <?php if($val['question_quiz_success_ratio'] >= 0.5) { ?>c-green<?php }else{ ?>c-red<?php } ?>">正确率: <?php echo number_format($val['question_quiz_success_ratio'] * 100, 1); ?>%</li>
+                	<li class="<?php if($this->sort_type == 'poft') { ?>active<?php } ?> <?php if($val['question_quiz_poft_ratio'] >= 0.5) { ?>c-green<?php }else{ ?>c-red<?php } ?>">一次通过率: <?php echo number_format($val['question_quiz_poft_ratio'] * 100, 1); ?>%</li>
+                	<li class="<?php if($this->sort_type == 'quiz_count') { ?>active<?php } ?>">答题: <?php echo $val['question_quiz_count_total']; ?></li>
+                	<li class="<?php if($this->sort_type == 'question_count') { ?>active<?php } ?>">出题: <?php echo $val['question_count']; ?></li>
+                    <li class="<?php if($this->sort_type == 'integral') { ?>active<?php } ?>">积分: <?php echo $val['integral']; ?></li>
+                </ul>
+            </div>
+        </div>
+	<?php } ?>
+<?php } ?>

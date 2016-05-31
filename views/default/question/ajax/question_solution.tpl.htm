@@ -1,0 +1,38 @@
+
+<div class="card-header bgm-cyan">
+	<h2>
+		<i class="md md-spellcheck m-r-5"></i> 答案及解析
+	</h2>
+	<ul class="actions actions-alt">
+        <li>
+            <a href="javascript:void(0);" class="close-question-solution">
+                <i class="md md-close"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="card-body card-padding">
+	<div class="quiz-answer">
+		<?php if ($this->quiz_answer) { ?>
+			<p class="c-black m-t-20 question-solution-title">【正确答案】</p>
+			<section class="question-solution-body">
+				<ul class="c-green">
+					<?php echo $this->quiz_answer; ?>
+				</ul>
+			</section>
+				
+		<?php } ?>
+	</div>
+	<div class="question-answer">
+		<section>
+			<p class="c-black m-t-20 question-solution-title">【详细分析】</p>
+			<div class="question-solution-body">
+				<?php if($this->question_solution) { ?>
+					<?php echo $this->question_solution; ?>
+				<?php } else { ?>
+					<p class="c-gray">:-( 暂时没有该问题的详细分析</p>
+				<?php } ?>
+			</div>
+		</section>
+	</div>
+</div>
